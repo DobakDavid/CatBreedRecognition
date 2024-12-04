@@ -42,13 +42,16 @@ def save_model(model: torch.nn.Module,
              f=model_save_path)
   
 def check_and_remove_corrupted_image(file_path):
-  """Checks the directory and all subdirectories for corrupted image files and removes them.
+  """Opens a file to check if it is a corrupted image. If the file is a corrupted image, the function removes it.
 
   Args:
-    file_path: A target PyTorch model to save.
-  
+    file_path: A file path to open.
+
+  Returns:
+    Returns True if the file was a corrupted image file.
+
   Example usage:
-    check_and_remove_corrupted_image(model="../content/images")
+    check_and_remove_corrupted_image(model="../content/images/Tulipe_148461.jpg")
   """
   try:
     with Image.open(file_path) as img:
@@ -60,6 +63,14 @@ def check_and_remove_corrupted_image(file_path):
     return True  # Image was corrupted and removed
 
 def scan_and_clean_directory(directory):
+  """Walks through a directory and it's subdirectories iteratively, and removes all of the corrupted image files.
+
+  Args:
+    directory: A file path of a root directory to open.
+
+  Example usage:
+    scan_and_clean_directory(model="../content/images")
+  """
   for root, dirs, files in os.walk(directory):
     for file in files:
       file_path = os.path.join(root, file)
