@@ -192,3 +192,4 @@ def train(model: torch.nn.Module,
 
   # Return the filled results at the end of the epochs
   return results
+
