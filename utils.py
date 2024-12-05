@@ -75,3 +75,57 @@ def scan_and_clean_directory(directory):
     for file in files:
       file_path = os.path.join(root, file)
       check_and_remove_corrupted_image(file_path)
+
+def remove_single_image_classes(data_dir, treshold = 1):
+  """Walks through a directory and it's subdirectories iteratively, and removes all of the corrupted image files.
+
+  Args:
+    directory: A file path of a root directory to open.
+
+  Example usage:
+    scan_and_clean_directory(model="../content/images")
+  """
+  for class_name in os.listdir(data_dir):
+    class_path = os.path.join(data_dir, class_name)
+    if os.path.isdir(class_path):
+      num_images = len(os.listdir(class_path))
+      if num_images <= treshold:  # Check if class has only one image or less
+        shutil.rmtree(class_path)  # Remove the class folder
+        print(f"Removed class with less than {treshold + 1} image(s): {class_name}") 
+
+def make_predictions(model: torch.nn.Module,
+                     data: list,
+                     device: torch.device = "cpu"):
+  """Makes predictions for the data with the given model.
+
+  Args:
+    model: Trained PyTorch model.
+    data: Input data represented as list for the model, the shape has to compatible with model's input.
+    device: PyTorch device, the default is "cpu".
+
+  Returns:
+    Return the prediction probabilities for classes.
+
+  Example usage:
+    make_predictions(model=model_0,
+                     data=Tulipe_example,
+                     device=device)
+  """
+  pred_probs = []
+  model.eval()
+  with torch.inference_mode():
+    for sample in data:
+      # Prepare sample
+      sample = torch.unsqueeze(sample, dim=0).to(device) # Add an extra dimension and send to device
+
+      # Forward pass
+      pred_logit = model(sample)
+
+      # Get prediction probability
+      pred_prob = torch.softmax(pred_logit.squeeze(), dim = 0)
+
+      # Get pred_prob off from device to cpu
+      pred_probs.append(pred_prob.cpu())
+
+  # Stack the pred_probs to turn list into a tensor
+  return torch.stack(pred_probs)     
