@@ -153,7 +153,25 @@ def train_step(model: torch.nn.Module,
                optimizer: torch.optim.Optimizer,
                accuracy_fn,
                device: torch.device):
-  """ Functionizing training loop. """
+  """ Functionizing a common PyTorch train loop.
+
+  Args:
+    model: PyTorch model to train.
+    data_loader: DataLoader, containing the training data.
+    loss_fn: Loss function for training. 
+    accuracy_fn: Accuracy function for classification.
+    device: PyTorch device for calculation.
+    
+  Returns:
+    Tuple containing train loss and train accuracy.
+
+  Example usage:
+    train_step(model = model_0,
+              data_loader = train_dataloader,
+              loss_fn = nn.CrossEntropyLoss(),
+              accuracy_fn = accuracy_fn,
+              device = "cpu")
+  """
 
   # Initialize training loss and training accuracy
   train_loss, train_acc = 0, 0
@@ -194,7 +212,25 @@ def test_step(model: torch.nn.Module,
               loss_fn: torch.nn.Module,
               accuracy_fn,
               device: torch.device):
-  """ Functionizing test loop. """
+  """ Functionizing a common PyTorch test loop.
+
+  Args:
+    model: PyTorch model to train.
+    data_loader: DataLoader, containing the test data.
+    loss_fn: Loss function for training. 
+    accuracy_fn: Accuracy function for classification.
+    device: PyTorch device for calculation.
+    
+  Returns:
+    Tuple containing test loss and test accuracy.
+
+  Example usage:
+    test_step(model = model_0,
+              data_loader = test_dataloader,
+              loss_fn = nn.CrossEntropyLoss(),
+              accuracy_fn = accuracy_fn,
+              device = "cpu")
+  """
 
   # Initialize test loss and training accuracy
   test_loss, test_acc = 0, 0
@@ -231,7 +267,7 @@ def train(model: torch.nn.Module,
           loss_fn: torch.nn.Module = nn.CrossEntropyLoss(),
           epochs: int = 5):
 
-  """Splits image data into train and test directories.
+  """Trains PyTorch model.
 
   Args:
     model: PyTorch model to train.
