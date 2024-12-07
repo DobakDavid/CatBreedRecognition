@@ -231,6 +231,30 @@ def train(model: torch.nn.Module,
           loss_fn: torch.nn.Module = nn.CrossEntropyLoss(),
           epochs: int = 5):
 
+  """Splits image data into train and test directories.
+
+  Args:
+    model: PyTorch model to train.
+    train_dataloader: DataLoader, containing the training data.
+    test_dataloader: DataLoader, containing the test data.
+    optimizer: Optimizer function for training. 
+    accuracy_fn: Accuracy function for classification.
+    loss_fn: Loss function for training. Default is nn.CrossEntropyLoss().
+    epochs: Number of epochs, default is 5.
+  
+  Returns:
+    Dictionary containing the name of the model, train loss, train accuracy, test loss, test accuracy.
+
+  Example usage:
+    train(model = model_0,
+          train_dataloader = train_dataloader,
+          test_dataloader = test_dataloader,
+          optimizer = torch.optim.Adam(model.parameters(), lr=0.001),
+          accuracy_fn = accuracy_fn,
+          loss_fn = nn.CrossEntropyLoss(),
+          epochs = 5) 
+  """
+
   # 1. Create empty results dictionary
   results = {"model_name": [model.__class__.__name__],
              "train_loss": [],
