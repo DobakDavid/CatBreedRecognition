@@ -6,6 +6,7 @@ from torch import nn
 import os
 import tqdm
 from PIL import Image
+import random
 
 from pathlib import Path
 import shutil
@@ -268,3 +269,49 @@ def train(model: torch.nn.Module,
 
   # Return the results at the end of the epochs
   return results
+
+def split_data(data_dir: Path,
+              train_dir: Path = Path("train"),
+              test_dir: Path = Path("test"),
+              train_ratio: float = 0.8):
+  """Splits image data into train and test directories.
+
+  Args:
+    data_dir: Path to the directory containing the image data.
+    train_dir: Path to the directory where the training data will be saved.
+    test_dir: Path to the directory where the testing data will be saved.
+    train_ratio: The proportion of data to include in the training set.
+
+   Example usage:
+      split_data(data_dir=model_0,
+                 train_dir=Path("train"),
+                 test_dir=Path("test"),
+                 train_ratio = 0.8) 
+  """
+
+  # Create train and test directories
+  train_dir.mkdir(exist_ok=True)
+  test_dir.mkdir(exist_ok=True)
+
+  # Loop through each flower type subfolder
+  for class_type in data_dir.iterdir():
+      if class_type.is_dir():
+        # Create corresponding subfolders in train and test directories
+        (train_dir / class_type.name).mkdir(exist_ok=True)
+        (test_dir / class_type.name).mkdir(exist_ok=True)
+
+        # Get a list of all image files in the current flower type subfolder
+        image_files = list(class_type.glob("*.jpg"))  # Adjust file extension if needed
+
+        # Shuffle the image files randomly
+        random.shuffle(image_files)
+
+        # Calculate the split index
+        split_index = int(len(image_files) * train_ratio)
+
+        # Copy images to train and test directories based on the split index
+        for i, image_file in enumerate(image_files):
+          if i < split_index:
+            shutil.copy(image_file, train_dir / class_type.name / image_file.name)
+          else:
+            shutil.copy(image_file, test_dir / class_type.name / image_file.name)
