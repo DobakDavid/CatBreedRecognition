@@ -1,5 +1,11 @@
 import torch
 import torchvision
+from torch import nn
+
+
+import utils
+from utils import accuracy_fn
+
 
 device = "cpu"
 
@@ -26,7 +32,12 @@ def main():
         torch.nn.Linear(in_features=1536,
                         out_features=output_shape, # same number of output units as our number of classes
                         bias=True)).to(device)
+    
+    # Define loss and optimizer
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+    results = utils.train(model = model)
 
 if __name__ == "__main__":
     main()
