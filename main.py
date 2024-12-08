@@ -1,17 +1,26 @@
 import torch
 import torchvision
 from torch import nn
-
+import pathlib
+from pathlib import Path
 
 import utils
 from utils import accuracy_fn
 
 
-device = "cpu"
-
 # Main code
 def main():
+
+    # Choose the device
     device = "cpu"
+
+    # Define the path to your image folder
+    current_dir = pathlib.Path().resolve()
+    data_dir = current_dir / "Cat_Breeds"
+    train_dir = current_dir / Path("train")
+    test_dir = current_dir / Path("test")
+    
+    print(f"data_dir: {data_dir}, train_dir: {train_dir}, test_dir: {test_dir}")
 
     model = torchvision.models.efficientnet_b3(weights='DEFAULT').to(device)
 
@@ -37,7 +46,7 @@ def main():
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    results = utils.train(model = model)
+    #results = utils.train(model = model)
 
 if __name__ == "__main__":
     main()
