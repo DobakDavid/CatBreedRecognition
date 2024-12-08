@@ -335,7 +335,8 @@ def remove_low_image_classes(data_dir, treshold = 1):
 def split_data(data_dir: Path,
               train_dir: Path = Path("train"),
               test_dir: Path = Path("test"),
-              train_ratio: float = 0.8):
+              train_ratio: float = 0.8,
+              experimental_ratio: float = 0.5):
   """Splits image data into train and test directories.
 
   Args:
@@ -343,12 +344,14 @@ def split_data(data_dir: Path,
     train_dir: Path to the directory where the training data will be saved.
     test_dir: Path to the directory where the testing data will be saved.
     train_ratio: The proportion of data to include in the training set.
+    experimental_ratio: The proportion of the data to use from the original data set.
 
    Example usage:
       split_data(data_dir=model_0,
                  train_dir=Path("train"),
                  test_dir=Path("test"),
-                 train_ratio = 0.8) 
+                 train_ratio = 0.8,
+                 experimental_ratio = 0.5) 
   """
 
   # Create train and test directories
@@ -367,6 +370,12 @@ def split_data(data_dir: Path,
 
         # Shuffle the image files randomly
         random.shuffle(image_files)
+
+        # Calculate the number of images to use based on data_ratio
+        num_images_to_use = int(len(image_files) * experimental_ratio)
+
+        # Select a subset of images based on experimental_ratio
+        image_files = image_files[:num_images_to_use]
 
         # Calculate the split index
         split_index = int(len(image_files) * train_ratio)
