@@ -2,3 +2,5 @@ myenv/
 *.pyc
 __pycache__/
 Cat_Breeds/
+test/
+train/
