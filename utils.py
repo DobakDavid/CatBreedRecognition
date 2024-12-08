@@ -378,3 +378,16 @@ def split_data(data_dir: Path,
           else:
             shutil.copy(image_file, test_dir / class_type.name / image_file.name)
 
+def get_data_libraries(data_dir: Path,
+                       train_dir: Path,
+                       test_dir: Path,
+                       clean_data: bool = True,
+                       low_image_treshold: int = 1,
+                       split_train_ratio: float = 0.8,
+                       split_experimental_ratio: float = 0.8):
+  """
+  Docstring
+  """
+
+  pass
+
