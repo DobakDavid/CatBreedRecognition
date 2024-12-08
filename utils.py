@@ -354,6 +354,19 @@ def split_data(data_dir: Path,
                  experimental_ratio = 0.5) 
   """
 
+  # Remove the existing directories
+  if train_dir.exists():
+    if train_dir.is_dir(): # Check if the path is directory
+      shutil.rmtree(train_dir) # Remove not empty directory
+    else:
+      train_dir.unlink()
+
+  if test_dir.exists():
+    if test_dir.is_dir(): # Check if the path is directory
+      shutil.rmtree(test_dir) # Remove not empty directory
+    else:
+      test_dir.unlink()
+
   # Create train and test directories
   train_dir.mkdir(exist_ok=True)
   test_dir.mkdir(exist_ok=True)
