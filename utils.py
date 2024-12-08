@@ -396,7 +396,40 @@ def get_data_libraries(data_dir: Path,
                        split_experimental_ratio: float = 0.8):
   """
   Docstring
-  """
 
-  pass
+  Args:
+    data_dir:
+    train_dir:
+    test_dir:
+    clean_data:
+    low_image_treshold:
+    split_train_ratio:
+    split_experimental_ratio:
+  
+  Example usage:
+    get_data_libraries(data_dir:
+                       train_dir:
+                       test_dir:
+                       clead_data:
+                       low_image_treshold:
+                       split_train_ratio:
+                       split_experimental_ratio:)
+  """
+  # Clean the dataset if required
+  if clean_data:
+    scan_and_clean_directory(data_dir)
+    remove_low_image_classes(data_dir, low_image_treshold)
+  
+  # Split into trainining and test directory
+  split_data(data_dir,
+             train_dir,
+             test_dir,
+             split_train_ratio,
+             split_experimental_ratio)
+
+
+
+
+    
+
 
