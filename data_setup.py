@@ -14,9 +14,7 @@ def create_dataloaders(
   batch_size: int,
   num_workers: int=1  
 ):
-  """Creates training and testing DataLoaders.
-
-  Takes in a training directory and testing directroy path and turns them into 
+  """Creates training and testing DataLoaders. Takes in a training directory and testing directroy path and turns them into 
   PyTorch Datasets and then into PyTorch DataLoaders.
 
   Args:
@@ -29,12 +27,13 @@ def create_dataloaders(
   Returns:
     A tuple of (train_dataloader, test_dataloader, class_names).
     Where class_names is a list of the target classes.
-    Example usage:
-      train_dataloader, test_dataloader, class_names = create_dataloaders(train_dir=path/to/train_dir,
-        test_dir=path/to/test_dir,
-        transform=some_transform,
-        batch_size=32,
-        num_workers=4)
+
+  Example usage:
+    train_dataloader, test_dataloader, class_names = create_dataloaders(train_dir=path/to/train_dir,
+      test_dir=path/to/test_dir,
+      transform=some_transform,
+      batch_size=32,
+      num_workers=4)
   """
   # Use ImageFolder to create datasets(s)
   train_data = datasets.ImageFolder(train_dir, transform=transform)
