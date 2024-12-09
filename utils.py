@@ -4,7 +4,7 @@ File containing various utility functions for PyTorch model training.
 import torch
 from torch import nn
 import os
-import tqdm
+from tqdm.auto import tqdm
 from PIL import Image
 import random
 
