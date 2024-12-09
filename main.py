@@ -50,6 +50,9 @@ def main():
                                                                                    BATCH_SIZE,
                                                                                    NUM_WORKERS)
 
+    # Get the length of class_names (one output unit for each class)
+    output_shape = len(class_names)
+
     model = torchvision.models.efficientnet_b3(weights='DEFAULT').to(device)
 
     # Freeze the effnet layers
@@ -60,13 +63,10 @@ def main():
     torch.manual_seed(42)
     torch.cuda.manual_seed(42)
 
-    # Get the length of class_names (one output unit for each class)
-    output_shape = 66
-
     # Recreate the classifier layer and seed it to the target device
     model.classifier = torch.nn.Sequential(
         torch.nn.Dropout(p=0.2, inplace=True),
-        torch.nn.Linear(in_features=1536,
+        torch.nn.Linear(in_features=1536, # Check torch summary for this value
                         out_features=output_shape, # same number of output units as our number of classes
                         bias=True)).to(device)
     
@@ -74,7 +74,14 @@ def main():
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    #results = utils.train(model = model)
+    # Train the model
+    results = utils.train(model = model,
+                          train_dataloader = train_dataloader,
+                          test_dataloader = test_dataloader,
+                          optimizer = optimizer,
+                          accuracy_fn = accuracy_fn,
+                          loss_fn = loss_fn,
+                          epochs = 5)
 
 if __name__ == "__main__":
     main()
