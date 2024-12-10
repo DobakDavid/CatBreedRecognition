@@ -24,15 +24,15 @@ def main():
     utils.get_data_libraries(data_dir,
                              train_dir,
                              test_dir,
-                             clean_data = False,
-                             low_image_treshold = 20,
+                             clean_data = True,
+                             low_image_treshold = 200,
                              split_train_ratio = 0.8,
-                             split_experimental_ratio = 0.2)
+                             split_experimental_ratio = 0.01)
 
     #print(f"data_dir: {data_dir}, train_dir: {train_dir}, test_dir: {test_dir}")
 
     # Write transform for image
-    data_transform = transforms.Compose([
+    manual_transform = transforms.Compose([
         # Resize the images to 224x224
         transforms.Resize(size=(224, 224)),
         # Flip the images randomly on the horizontal
@@ -40,20 +40,24 @@ def main():
         transforms.ToTensor() # this also converts all pixel values from 0 to 255 to be between 0.0 and 1.0
     ])
 
+    # Get pretrained efficientnet model
+    model = torchvision.models.efficientnet_b3(weights='DEFAULT').to(device)
+    weights = torchvision.models.EfficientNet_B3_Weights.DEFAULT 
+    auto_transform = weights.transforms()
+
     BATCH_SIZE = 32
     NUM_WORKERS = 1
 
     # Creating train and test dataloder, getting class names
     train_dataloader, test_dataloader, class_names = data_setup.create_dataloaders(train_dir,
                                                                                    test_dir,
-                                                                                   data_transform,
+                                                                                   auto_transform,
                                                                                    BATCH_SIZE,
                                                                                    NUM_WORKERS)
 
     # Get the length of class_names (one output unit for each class)
     output_shape = len(class_names)
 
-    model = torchvision.models.efficientnet_b3(weights='DEFAULT').to(device)
 
     # Freeze the effnet layers
     for param in model.features.parameters():
