@@ -12,9 +12,9 @@ import data_setup
 # Main code
 def main():
 
-    # Choose the device
-    device = "cpu"
-
+    # Device agnostic code
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
     # Define the path to your image folder
     current_dir = pathlib.Path().resolve()
     data_dir = current_dir / "Cat_Breeds/images"
