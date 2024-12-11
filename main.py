@@ -6,6 +6,7 @@ import pathlib
 from pathlib import Path
 
 import utils
+import engine
 from utils import accuracy_fn
 import data_setup
 
@@ -79,13 +80,13 @@ def main():
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     # Train the model
-    results = utils.train(model = model,
+    results = engine.train(model = model,
                           train_dataloader = train_dataloader,
                           test_dataloader = test_dataloader,
                           optimizer = optimizer,
-                          accuracy_fn = accuracy_fn,
                           loss_fn = loss_fn,
-                          epochs = 5)
+                          epochs = 5,
+                          device = device)
 
 if __name__ == "__main__":
     main()
