@@ -4,12 +4,12 @@ from torch import nn
 from torchvision import transforms
 import pathlib
 from pathlib import Path
-import gradio as gr 
 
 import utils
 import engine
 from utils import accuracy_fn
 import data_setup
+import model_builder
 
 # Main code
 def main():
@@ -23,6 +23,7 @@ def main():
     train_dir = current_dir / Path("train")
     test_dir = current_dir / Path("test")
     
+    # Get data libraries
     utils.get_data_libraries(data_dir,
                              train_dir,
                              test_dir,
@@ -31,24 +32,16 @@ def main():
                              split_train_ratio = 0.8,
                              split_experimental_ratio = 0.01)
 
-    #print(f"data_dir: {data_dir}, train_dir: {train_dir}, test_dir: {test_dir}")
-
-    # Write transform for image
-    manual_transform = transforms.Compose([
-        # Resize the images to 224x224
-        transforms.Resize(size=(224, 224)),
-        # Flip the images randomly on the horizontal
-        # Turn the image into a torch.Tensor
-        transforms.ToTensor() # this also converts all pixel values from 0 to 255 to be between 0.0 and 1.0
-    ])
-
     # Get pretrained efficientnet model
     model = torchvision.models.efficientnet_b3(weights='DEFAULT').to(device)
     weights = torchvision.models.EfficientNet_B3_Weights.DEFAULT 
     auto_transform = weights.transforms()
 
+
+    # Hyperparameters
     BATCH_SIZE = 32
     NUM_WORKERS = 1
+    LEARNING_RATE = 0.001
 
     # Creating train and test dataloder, getting class names
     train_dataloader, test_dataloader, class_names = data_setup.create_dataloaders(train_dir,
@@ -78,7 +71,7 @@ def main():
     
     # Define loss and optimizer
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(model.parameters(), LEARNING_RATE)
 
     # Train the model
     results = engine.train(model = model,
