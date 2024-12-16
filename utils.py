@@ -2,11 +2,15 @@
 File containing various utility functions for PyTorch model training.
 """ 
 import torch
+import torchvision
+import gradio as gr
 from torch import nn
 import os
 from tqdm.auto import tqdm
 from PIL import Image
 import random
+import pathlib
+from pathlib import Path
 
 from pathlib import Path
 import shutil
@@ -43,6 +47,31 @@ def save_model(model: torch.nn.Module,
   print(f"[INFO] Saving model to: {model_save_path}")
   torch.save(obj=model.state_dict(),
              f=model_save_path)
+
+def write_requirements(deployment_dir: str):
+  """ Writes automatically the requirements.txt for model deployment to the deployment folder. 
+  The following libaries' versions are tracked: torch, torchvision, gradio.
+
+  Args:
+    deployment_dir: Target folder of writing the requirements.txt.
+
+  Example usage:
+    write_requirements(deployment_dir = "deployment") // requirements.txt added to the deployment folder.
+  """
+
+  current_dir = pathlib.Path().resolve()
+  target_dir = current_dir / deployment_dir
+  requirement_dir = target_dir / "requirements.txt"
+  f = open(requirement_dir, "w") # Open existing file to write, if doesn't exist, create it
+  f.write("torch==" + torch.__version__ + "\n")
+  f.write("torchvision==" + torchvision.__version__ + "\n")
+  f.write("gradio==" + gr.__version__)
+  f.close() # Close file
+
+def launch_deployment(deployment_dir: str):
+  """Creates Gradio deployment folder structure, ready to launch. It is callable from main.
+  """
+  pass
 
 def accuracy_fn(y_true, y_pred):
   """Calculates accuracy between truth labels and predictions.
