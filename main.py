@@ -14,6 +14,9 @@ import model_builder
 # Main code
 def main():
 
+    # Test
+    utils.write_requirements("deployment_gr")
+
     # Device agnostic code
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
