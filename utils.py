@@ -3,6 +3,7 @@ File containing various utility functions for PyTorch model training.
 """ 
 import torch
 import torchvision
+from torchvision import datasets
 import gradio as gr
 from torch import nn
 import os
@@ -124,6 +125,9 @@ def make_predictions(model: torch.nn.Module,
   # Stack the pred_probs to turn list into a tensor
   return torch.stack(pred_probs)
   
+def get_existing_dataset(dataset):
+  pass
+
 def check_and_remove_corrupted_image(file_path):
   """Opens a file to check if it is a corrupted image. If the file is a corrupted image, the function removes it.
 
