@@ -62,8 +62,11 @@ def write_requirements(deployment_dir: str):
 
   current_dir = pathlib.Path().resolve()
   target_dir = current_dir / deployment_dir
-  requirement_dir = target_dir / "requirements.txt"
-  f = open(requirement_dir, "w") # Open existing file to write, if doesn't exist, create it
+  # Check if directory exists, if not, create it
+  if not target_dir.exists():
+    target_dir.mkdir()
+  requirement_path = target_dir / "requirements.txt"
+  f = open(requirement_path, "w") # Open existing file to write, if doesn't exist, create it
   f.write("torch==" + torch.__version__ + "\n")
   f.write("torchvision==" + torchvision.__version__ + "\n")
   f.write("gradio==" + gr.__version__)
