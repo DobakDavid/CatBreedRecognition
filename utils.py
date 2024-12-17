@@ -125,7 +125,15 @@ def make_predictions(model: torch.nn.Module,
   # Stack the pred_probs to turn list into a tensor
   return torch.stack(pred_probs)
   
-def get_existing_dataset(dataset):
+def get_existing_torchvision_dataloaders(dataset):
+  """Opens an existing torchvision dataset and creates training and test test dataloaders.
+
+  Args:
+    dataset: The name of the torchvision dataset (string).
+
+  Examples usage:
+    get_existing_torchvision_dataset("EMNIST") // EMNIST librari
+  """
   pass
 
 def check_and_remove_corrupted_image(file_path):
